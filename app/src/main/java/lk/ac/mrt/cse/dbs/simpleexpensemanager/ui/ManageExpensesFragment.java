@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,7 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
                 null;
         if (currentExpenseManager != null) {
             adapter = new ArrayAdapter<>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item,
-                    currentExpenseManager.getAccountNumbersList());
+                    currentExpenseManager.getAccountNumbersList(this.getContext()));
         }
         accountSelector.setAdapter(adapter);
 
@@ -103,7 +104,8 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
 
                 if (currentExpenseManager != null) {
                     try {
-                        currentExpenseManager.updateAccountBalance(selectedAccount, day, month, year,
+
+                        currentExpenseManager.updateAccountBalance(this.getContext(),selectedAccount, day, month, year,
                                 ExpenseType.valueOf(type.toUpperCase()), amountStr);
                     } catch (InvalidAccountException e) {
                         new AlertDialog.Builder(this.getActivity())

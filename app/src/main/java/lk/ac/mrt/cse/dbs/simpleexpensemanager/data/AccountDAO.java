@@ -16,6 +16,8 @@
 
 package lk.ac.mrt.cse.dbs.simpleexpensemanager.data;
 
+import android.content.Context;
+
 import java.util.List;
 
 import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.exception.InvalidAccountException;
@@ -33,14 +35,14 @@ public interface AccountDAO {
      *
      * @return - list of account numbers as String
      */
-    public List<String> getAccountNumbersList();
+    public List<String> getAccountNumbersList(Context con);
 
     /***
      * Get a list of accounts.
      *
      * @return - list of Account objects.
      */
-    public List<Account> getAccountsList();
+    public List<Account> getAccountsList(Context con);
 
     /***
      * Get the account given the account number.
@@ -49,14 +51,14 @@ public interface AccountDAO {
      * @return - the corresponding Account
      * @throws InvalidAccountException - if the account number is invalid
      */
-    public Account getAccount(String accountNo) throws InvalidAccountException;
+    public Account getAccount(Context con,String accountNo) throws InvalidAccountException;
 
     /***
      * Add an account to the accounts collection.
      *
      * @param account - the account to be added.
      */
-    public void addAccount(Account account);
+    public void addAccount(Context con,Account account);
 
     /***
      * Remove an account from the accounts collection.
@@ -64,7 +66,7 @@ public interface AccountDAO {
      * @param accountNo - of the account to be removed.
      * @throws InvalidAccountException - if the account number is invalid
      */
-    public void removeAccount(String accountNo) throws InvalidAccountException;
+    public void removeAccount(Context con,String accountNo) throws InvalidAccountException;
 
     /***
      * Update the balance of the given account. The type of the expense is specified in order to determine which
@@ -78,6 +80,6 @@ public interface AccountDAO {
      * @param amount      - amount involved
      * @throws InvalidAccountException - if the account number is invalid
      */
-    public void updateBalance(String accountNo, ExpenseType expenseType, double amount) throws InvalidAccountException;
+    public void updateBalance(Context con,String accountNo, ExpenseType expenseType, double amount) throws InvalidAccountException;
 
 }
