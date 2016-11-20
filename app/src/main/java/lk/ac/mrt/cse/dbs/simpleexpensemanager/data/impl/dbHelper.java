@@ -23,7 +23,7 @@ import lk.ac.mrt.cse.dbs.simpleexpensemanager.data.model.Transaction;
  */
 public class dbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "expenceManager";
+    private static final String DATABASE_NAME = "140260h";
     public static final String ACCOUNTS_TABLE_NAME = "accounts";
     public static final String ACCOUNTS_COLUMN_ACNUM = "ac_number";
     public static final String ACCOUNTS_COLUMN_bank = "bank";
@@ -47,10 +47,10 @@ public class dbHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ACCOUNTS_TABLE);
         Log.d("ok","ok1");
         String CREATE_TRANSACCTIONS_TABLE = "CREATE TABLE "+ TRANSACTION_TABLE_NAME + "("
-                +"ID INTEGER PRIMARY KEY,FOREIGN KEY(" + TRANSACTION_COLUMN_acno + ") REFERENCES "+ACCOUNTS_TABLE_NAME+"("+ACCOUNTS_COLUMN_ACNUM+"),"
-                + TRANSACTION_COLUMN_date + " TEXT," + TRANSACTION_COLUMN_expence_type +  " TEXT," +TRANSACTION_COLUMN_amount+" REAL"+ ")";
+                +"ID INTEGER PRIMARY KEY,"+TRANSACTION_COLUMN_acno+" TEXT,"
+                + TRANSACTION_COLUMN_date + " TEXT," + TRANSACTION_COLUMN_expence_type +  " TEXT," +TRANSACTION_COLUMN_amount+" REAL,FOREIGN KEY(" + TRANSACTION_COLUMN_acno + ") REFERENCES "+ACCOUNTS_TABLE_NAME+"("+ACCOUNTS_COLUMN_ACNUM+")"+ ")";
         db.execSQL(CREATE_TRANSACCTIONS_TABLE);
-        Log.d("ok","ok2");
+        Log.d("Sudaraka","created tables");
     }
 
     @Override
@@ -101,10 +101,10 @@ public class dbHelper extends SQLiteOpenHelper {
         ArrayList<Account> accounts=new ArrayList();
         // looping through all rows and adding to list
         cursor.moveToFirst();
-        String no=cursor.getString(1);
-        String bnk=cursor.getString(2);
-        String holder=cursor.getString(3);
-        Double bal=cursor.getDouble(4);
+        String no=cursor.getString(0);
+        String bnk=cursor.getString(1);
+        String holder=cursor.getString(2);
+        Double bal=cursor.getDouble(3);
         Account ac=new Account(no,bnk,holder,bal);
         return ac;
     }
@@ -147,6 +147,7 @@ public class dbHelper extends SQLiteOpenHelper {
 
     //-------------------------------------------------------------------------------------------------------------------------------------
     public void logTransaction(Date date, String accountNo, ExpenseType expenseType, double amount) {
+        Log.d("ok",date.toString());
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TRANSACTION_COLUMN_acno, accountNo); // Contact Name
@@ -169,11 +170,11 @@ public class dbHelper extends SQLiteOpenHelper {
                 String acno=cursor.getString(1);
                 Date date= null;
                 try {
-                    Log.d("ok","kkkkkkk");
-                    date = new SimpleDateFormat("dd-MMM-yyyy HH:mm").parse(cursor.getString(2));
+                    date = new SimpleDateFormat("yyyy-MM-dd").parse(cursor.getString(2));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                Log.d("ok",date.toString());
                 String type=cursor.getString(3);
                 Double amount=cursor.getDouble(4);
                 Transaction tr=new Transaction(date,acno, ExpenseType.valueOf(type),amount);
